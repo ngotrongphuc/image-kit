@@ -6,7 +6,7 @@ export const HomePage = () => {
   return (
     <div className="space-y-12">
       <section className="text-center">
-        <h1 className="bg-gradient-to-r from-slate-900 to-brand-600 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl">
+        <h1 className="bg-gradient-to-r from-slate-900 to-brand-600 bg-clip-text pb-2 text-4xl font-bold leading-[1.15] tracking-tight text-transparent sm:text-5xl">
           image-kit
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-slate-600">
