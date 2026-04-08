@@ -14,7 +14,7 @@ export const RootLayout = () => {
           </Link>
           <nav className="flex items-center gap-2 text-sm">
             <a
-              href="https://github.com"
+              href="https://github.com/ngotrongphuc/image-kit"
               target="_blank"
               rel="noreferrer"
               className="btn-ghost"
