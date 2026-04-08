@@ -6,6 +6,7 @@ import { getToolById } from '@/tools/registry'
 import { DropZone } from '@/components/DropZone'
 import { FileList } from '@/components/FileList'
 import { OptionsPanel } from '@/components/OptionsPanel'
+import { PreviewModal } from '@/components/PreviewModal'
 import { useFileQueue } from '@/store/useFileQueue'
 import { downloadBlob, downloadZip } from '@/lib/download'
 import type { OptionValue, ToolOptions } from '@/tools/types'
@@ -35,9 +36,10 @@ export const ToolPage = () => {
   const addFiles = useFileQueue((s) => s.addFiles)
   const remove = useFileQueue((s) => s.remove)
   const clear = useFileQueue((s) => s.clear)
-  const update = useFileQueue((s) => s.update)
   const setStatus = useFileQueue((s) => s.setStatus)
   const setProgress = useFileQueue((s) => s.setProgress)
+  const setResult = useFileQueue((s) => s.setResult)
+  const setError = useFileQueue((s) => s.setError)
 
   const defaults = useMemo<ToolOptions>(() => {
     if (!tool) return {}
@@ -50,6 +52,7 @@ export const ToolPage = () => {
 
   const [options, setOptions] = useState<ToolOptions>(defaults)
   const [running, setRunning] = useState(false)
+  const [previewId, setPreviewId] = useState<string | null>(null)
 
   if (!tool) return <Navigate to="/" replace />
 
@@ -69,17 +72,9 @@ export const ToolPage = () => {
           options,
           onProgress: (p) => setProgress(item.id, Math.max(0, Math.min(100, p))),
         })
-        update(item.id, {
-          status: 'done',
-          progress: 100,
-          resultBlob: result.blob,
-          resultName: result.filename,
-        })
+        setResult(item.id, result.blob, result.filename)
       } catch (err) {
-        update(item.id, {
-          status: 'error',
-          error: err instanceof Error ? err.message : 'Unknown error',
-        })
+        setError(item.id, err instanceof Error ? err.message : 'Unknown error')
       }
     }
     setRunning(false)
@@ -101,6 +96,7 @@ export const ToolPage = () => {
 
   const doneCount = items.filter((i) => i.status === 'done').length
   const hasWork = items.some((i) => i.status === 'pending' || i.status === 'error')
+  const previewItem = items.find((i) => i.id === previewId) ?? null
   const Icon = tool.icon
 
   return (
@@ -126,7 +122,7 @@ export const ToolPage = () => {
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-4">
           <DropZone onFiles={(files) => addFiles(files)} accept={toDropzoneAccept(tool.accept)} />
-          <FileList items={items} onRemove={remove} />
+          <FileList items={items} onRemove={remove} onPreview={setPreviewId} />
 
           {items.length > 0 && (
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -141,7 +137,9 @@ export const ToolPage = () => {
                   disabled={running || !hasWork}
                 >
                   <Play className="h-4 w-4" />
-                  {running ? 'Processing…' : `Run on ${items.length} file${items.length > 1 ? 's' : ''}`}
+                  {running
+                    ? 'Processing…'
+                    : `Run on ${items.length} file${items.length > 1 ? 's' : ''}`}
                 </button>
                 <button
                   type="button"
@@ -164,6 +162,8 @@ export const ToolPage = () => {
           <OptionsPanel schema={tool.options} values={options} onChange={handleOptionChange} />
         </aside>
       </div>
+
+      <PreviewModal item={previewItem} onClose={() => setPreviewId(null)} />
     </div>
   )
 }
