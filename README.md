@@ -2,6 +2,8 @@
 
 A tiny browser-native image toolkit. Compress, convert, and resize images — 100% client-side. Nothing is uploaded anywhere.
 
+🔗 **[my-image-kit.vercel.app](https://my-image-kit.vercel.app/)**
+
 ## Features
 
 - **Compress** — shrink file size with an adjustable quality slider (powered by `browser-image-compression`, uses Web Workers)
