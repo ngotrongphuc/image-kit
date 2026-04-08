@@ -28,11 +28,11 @@ export const PreviewModal = ({ item, onClose }: PreviewModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-6 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-2 backdrop-blur-sm sm:p-6"
       onClick={onClose}
     >
       <div
-        className="relative max-h-full w-full max-w-6xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="relative max-h-full w-full max-w-6xl overflow-hidden rounded-xl bg-white shadow-2xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -44,41 +44,43 @@ export const PreviewModal = ({ item, onClose }: PreviewModalProps) => {
           <X className="h-5 w-5" />
         </button>
 
-        <div className="grid max-h-[85vh] grid-cols-1 gap-px bg-slate-200 md:grid-cols-2">
+        <div className="grid max-h-[85vh] grid-cols-1 gap-px overflow-auto bg-slate-200 md:grid-cols-2">
           <div className="flex flex-col bg-slate-50">
-            <div className="flex items-center justify-between px-4 py-3">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <div className="flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:text-xs">
                 Original
               </div>
-              <div className="text-xs text-slate-500">{formatBytes(item.file.size)}</div>
+              <div className="text-[11px] text-slate-500 sm:text-xs">
+                {formatBytes(item.file.size)}
+              </div>
             </div>
-            <div className="flex flex-1 items-center justify-center overflow-auto bg-[conic-gradient(at_50%_50%,#f1f5f9_0deg,#e2e8f0_90deg,#f1f5f9_180deg,#e2e8f0_270deg,#f1f5f9_360deg)] p-4">
+            <div className="flex flex-1 items-center justify-center bg-[conic-gradient(at_50%_50%,#f1f5f9_0deg,#e2e8f0_90deg,#f1f5f9_180deg,#e2e8f0_270deg,#f1f5f9_360deg)] p-2 sm:p-4">
               <img
                 src={item.originalUrl}
                 alt="Original"
-                className="max-h-[70vh] max-w-full object-contain shadow-sm"
+                className="max-h-[40vh] max-w-full object-contain shadow-sm md:max-h-[70vh]"
               />
             </div>
           </div>
 
           <div className="flex flex-col bg-slate-50">
-            <div className="flex items-center justify-between px-4 py-3">
-              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
+            <div className="flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600 sm:text-xs">
                 Processed
               </div>
-              <div className="text-xs text-slate-500">
+              <div className="text-[11px] text-slate-500 sm:text-xs">
                 {item.resultBlob ? formatBytes(item.resultBlob.size) : '—'}
               </div>
             </div>
-            <div className="flex flex-1 items-center justify-center overflow-auto bg-[conic-gradient(at_50%_50%,#f1f5f9_0deg,#e2e8f0_90deg,#f1f5f9_180deg,#e2e8f0_270deg,#f1f5f9_360deg)] p-4">
+            <div className="flex flex-1 items-center justify-center bg-[conic-gradient(at_50%_50%,#f1f5f9_0deg,#e2e8f0_90deg,#f1f5f9_180deg,#e2e8f0_270deg,#f1f5f9_360deg)] p-2 sm:p-4">
               {hasResult ? (
                 <img
                   src={item.resultUrl}
                   alt="Processed"
-                  className="max-h-[70vh] max-w-full object-contain shadow-sm"
+                  className="max-h-[40vh] max-w-full object-contain shadow-sm md:max-h-[70vh]"
                 />
               ) : (
-                <div className="px-8 py-16 text-center text-sm text-slate-400">
+                <div className="px-6 py-10 text-center text-sm text-slate-400 sm:px-8 sm:py-16">
                   {item.status === 'processing'
                     ? 'Processing…'
                     : item.status === 'error'

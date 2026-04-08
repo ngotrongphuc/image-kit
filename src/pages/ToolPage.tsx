@@ -101,20 +101,20 @@ export const ToolPage = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between gap-4">
-        <Link to="/" className="btn-ghost">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Link to="/" className="btn-ghost self-start">
           <ArrowLeft className="h-4 w-4" />
           Back
         </Link>
         <div className="flex items-center gap-3">
           <div
-            className={`flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${tool.accent} text-white`}
+            className={`flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-gradient-to-br ${tool.accent} text-white`}
           >
             <Icon className="h-5 w-5" />
           </div>
-          <div>
+          <div className="min-w-0">
             <h1 className="text-xl font-semibold">{tool.name}</h1>
-            <p className="text-sm text-slate-500">{tool.tagline}</p>
+            <p className="truncate text-sm text-slate-500">{tool.tagline}</p>
           </div>
         </div>
       </div>
@@ -125,9 +125,10 @@ export const ToolPage = () => {
           <FileList items={items} onRemove={remove} onPreview={setPreviewId} />
 
           {items.length > 0 && (
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <button type="button" className="btn-ghost" onClick={clear} disabled={running}>
-                <Trash2 className="h-4 w-4" /> Clear all
+                <Trash2 className="h-4 w-4" /> <span className="hidden sm:inline">Clear all</span>
+                <span className="sm:hidden">Clear</span>
               </button>
               <div className="flex items-center gap-2">
                 <button
@@ -137,9 +138,7 @@ export const ToolPage = () => {
                   disabled={running || !hasWork}
                 >
                   <Play className="h-4 w-4" />
-                  {running
-                    ? 'Processing…'
-                    : `Run on ${items.length} file${items.length > 1 ? 's' : ''}`}
+                  {running ? 'Processing…' : `Run (${items.length})`}
                 </button>
                 <button
                   type="button"
@@ -148,7 +147,9 @@ export const ToolPage = () => {
                   disabled={doneCount === 0 || running}
                 >
                   <Download className="h-4 w-4" />
-                  Download {doneCount > 1 ? 'all (zip)' : ''}
+                  <span className="hidden sm:inline">
+                    Download {doneCount > 1 ? 'all (zip)' : ''}
+                  </span>
                 </button>
               </div>
             </div>

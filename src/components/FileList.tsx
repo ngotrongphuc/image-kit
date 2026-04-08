@@ -16,34 +16,48 @@ export const FileList = ({ items, onRemove, onPreview }: FileListProps) => {
   if (items.length === 0) return null
 
   return (
-    <ul className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+    <ul className="divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-white">
       {items.map((item) => {
-        const showOriginalThumb = isImageFile(item.file)
+        const isImage = isImageFile(item.file)
         const showResultThumb = item.status === 'done' && item.resultUrl
+        // Mobile: show one thumb (result if done, else original).
+        // Desktop (sm+): show both so the comparison is visible at a glance.
         return (
-          <li key={item.id} className="flex items-center gap-4 px-4 py-3">
+          <li key={item.id} className="flex items-center gap-2 px-3 py-3 sm:gap-4 sm:px-4">
             <button
               type="button"
               aria-label="Preview"
               onClick={() => onPreview(item.id)}
               className="group relative flex flex-none items-center gap-1.5"
             >
-              {showOriginalThumb ? (
+              {isImage ? (
                 <img
-                  src={item.originalUrl}
+                  src={showResultThumb ? item.resultUrl : item.originalUrl}
                   alt=""
-                  className="h-12 w-12 rounded-lg border border-slate-200 bg-slate-100 object-cover"
+                  className={cn(
+                    'h-11 w-11 rounded-lg border border-slate-200 bg-slate-100 object-cover sm:h-12 sm:w-12',
+                    showResultThumb && 'border-emerald-300 ring-2 ring-emerald-200 sm:hidden',
+                  )}
                 />
               ) : (
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-500">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-500 sm:h-12 sm:w-12">
                   <FileImage className="h-5 w-5" />
                 </div>
               )}
-              {showResultThumb && (
+              {/* Desktop-only original thumbnail when a result exists */}
+              {isImage && showResultThumb && (
+                <img
+                  src={item.originalUrl}
+                  alt=""
+                  className="hidden h-12 w-12 rounded-lg border border-slate-200 bg-slate-100 object-cover sm:block"
+                />
+              )}
+              {/* Desktop-only result thumbnail (paired with original above) */}
+              {isImage && showResultThumb && (
                 <img
                   src={item.resultUrl}
                   alt=""
-                  className="h-12 w-12 rounded-lg border border-emerald-300 bg-slate-100 object-cover ring-2 ring-emerald-200"
+                  className="hidden h-12 w-12 rounded-lg border border-emerald-300 bg-slate-100 object-cover ring-2 ring-emerald-200 sm:block"
                 />
               )}
               <span className="absolute inset-0 flex items-center justify-center rounded-lg bg-slate-900/0 opacity-0 transition group-hover:bg-slate-900/30 group-hover:opacity-100">
@@ -52,7 +66,7 @@ export const FileList = ({ items, onRemove, onPreview }: FileListProps) => {
             </button>
 
             <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => onPreview(item.id)}
@@ -60,10 +74,10 @@ export const FileList = ({ items, onRemove, onPreview }: FileListProps) => {
                 >
                   {item.file.name}
                 </button>
-                <div className="flex-none text-xs text-slate-500">
+                <div className="flex-none text-[11px] text-slate-500 sm:text-xs">
                   {formatBytes(item.file.size)}
                   {item.resultBlob && (
-                    <span className="ml-2 text-emerald-600">
+                    <span className="ml-1 text-emerald-600 sm:ml-2">
                       → {formatBytes(item.resultBlob.size)}
                     </span>
                   )}
@@ -80,14 +94,16 @@ export const FileList = ({ items, onRemove, onPreview }: FileListProps) => {
               </div>
             </div>
 
-            <div className="flex flex-none items-center gap-1">
-              {item.status === 'pending' && <span className="text-xs text-slate-400">queued</span>}
+            <div className="flex flex-none items-center">
+              {item.status === 'pending' && (
+                <span className="hidden text-xs text-slate-400 sm:inline">queued</span>
+              )}
               {item.status === 'processing' && (
                 <Loader2 className="h-4 w-4 animate-spin text-brand-500" />
               )}
               {item.status === 'done' && (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  <CheckCircle2 className="hidden h-4 w-4 text-emerald-500 sm:inline" />
                   <button
                     type="button"
                     aria-label="Download"
