@@ -9,6 +9,9 @@ import { filtersTool } from './filters'
 import { blurTool } from './blur'
 import { watermarkTool } from './watermark'
 import { memeTool } from './meme'
+import { upscaleTool } from './upscale'
+import { bgRemoveTool } from './bgRemove'
+import { htmlToImageTool } from './htmlToImage'
 
 export const tools: ImageTool[] = [
   compressTool,
@@ -21,6 +24,9 @@ export const tools: ImageTool[] = [
   blurTool,
   watermarkTool,
   memeTool,
+  upscaleTool,
+  bgRemoveTool,
+  htmlToImageTool,
 ]
 
 export const getToolById = (id: string | undefined): ImageTool | undefined =>

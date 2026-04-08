@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { ArrowLeft, Play, Trash2, Download } from 'lucide-react'
+import type { Accept } from 'react-dropzone'
 import { getToolById } from '@/tools/registry'
 import { DropZone } from '@/components/DropZone'
 import { FileList } from '@/components/FileList'
@@ -8,6 +9,23 @@ import { OptionsPanel } from '@/components/OptionsPanel'
 import { useFileQueue } from '@/store/useFileQueue'
 import { downloadBlob, downloadZip } from '@/lib/download'
 import type { OptionValue, ToolOptions } from '@/tools/types'
+
+/**
+ * Convert a tool's accept list (mime types or extensions) into the shape
+ * react-dropzone expects. Extensions go under a wildcard type.
+ */
+const toDropzoneAccept = (accept: string[]): Accept => {
+  const out: Record<string, string[]> = {}
+  for (const entry of accept) {
+    if (entry.startsWith('.')) {
+      if (!out['application/octet-stream']) out['application/octet-stream'] = []
+      out['application/octet-stream'].push(entry)
+    } else {
+      out[entry] = []
+    }
+  }
+  return out as Accept
+}
 
 export const ToolPage = () => {
   const { toolId } = useParams<{ toolId: string }>()
@@ -107,7 +125,7 @@ export const ToolPage = () => {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-4">
-          <DropZone onFiles={(files) => addFiles(files)} />
+          <DropZone onFiles={(files) => addFiles(files)} accept={toDropzoneAccept(tool.accept)} />
           <FileList items={items} onRemove={remove} />
 
           {items.length > 0 && (
