@@ -23,7 +23,10 @@ export const FileList = ({ items, onRemove, onPreview }: FileListProps) => {
         // Mobile: show one thumb (result if done, else original).
         // Desktop (sm+): show both so the comparison is visible at a glance.
         return (
-          <li key={item.id} className="flex items-center gap-2 px-3 py-3 sm:gap-4 sm:px-4">
+          <li
+            key={item.id}
+            className="flex items-center gap-2 overflow-hidden px-3 py-3 sm:gap-4 sm:px-4"
+          >
             <button
               type="button"
               aria-label="Preview"
@@ -66,11 +69,11 @@ export const FileList = ({ items, onRemove, onPreview }: FileListProps) => {
             </button>
 
             <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex min-w-0 items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => onPreview(item.id)}
-                  className="truncate text-left text-sm font-medium text-slate-800 hover:text-brand-600"
+                  className="block min-w-0 flex-1 truncate text-left text-sm font-medium text-slate-800 hover:text-brand-600"
                 >
                   {item.file.name}
                 </button>
