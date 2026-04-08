@@ -8,11 +8,8 @@
   #root {
     @apply h-full;
   }
-  html {
-    @apply overflow-x-hidden;
-  }
   body {
-    @apply overflow-x-hidden bg-slate-50 text-slate-900 font-sans antialiased;
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
   }
 }
 

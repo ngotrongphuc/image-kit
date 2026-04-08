@@ -119,8 +119,8 @@ export const ToolPage = () => {
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-4">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="min-w-0 space-y-4">
           <DropZone onFiles={(files) => addFiles(files)} accept={toDropzoneAccept(tool.accept)} />
           <FileList items={items} onRemove={remove} onPreview={setPreviewId} />
 
@@ -156,7 +156,7 @@ export const ToolPage = () => {
           )}
         </div>
 
-        <aside className="card h-fit p-5">
+        <aside className="card h-fit min-w-0 p-5">
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-500">
             Options
           </h3>

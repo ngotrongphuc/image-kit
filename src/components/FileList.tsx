@@ -25,7 +25,7 @@ export const FileList = ({ items, onRemove, onPreview }: FileListProps) => {
         return (
           <li
             key={item.id}
-            className="flex items-center gap-2 overflow-hidden px-3 py-3 sm:gap-4 sm:px-4"
+            className="flex min-w-0 items-center gap-2 px-3 py-3 sm:gap-4 sm:px-4"
           >
             <button
               type="button"
